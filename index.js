@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
 app.get('/pics', (req, res) => {
   const reqUrl = new url.URL(`${BASE_URL}${req.url}`);
   const searchParams = new url.URLSearchParams(reqUrl.search);
-  console.log('REQ', req.url, searchParams.get('query')); // REQ /pics?query=cats
+  console.log('REQ', req.url, req.query, searchParams.get('query')); // REQ /pics?query=fog { query: 'fog' } fog
 
   const searchImages = async () => {
     const { data } = await axios(
@@ -30,7 +30,7 @@ app.get('/pics', (req, res) => {
           Authorization: `Client-ID ${process.env.REACT_APP_UNSPLASH_API_KEY}`,
           "Accept-Version": "v1",
         },
-        params: searchParams,
+        params: req.query, // searchParams,
         /*
         params: {
           query: term,
@@ -40,7 +40,7 @@ app.get('/pics', (req, res) => {
     );
     // console.log(data.results);
     res.json(data.results);
-    return data;
+    /* return data; */
   };
   try {
     searchImages();
